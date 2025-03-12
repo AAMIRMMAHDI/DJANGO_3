@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}سبد خرید{% endblock title %}
+{% block 'content' %}
+  <!-- slider Area Start-->
+  <div class="slider-area ">
+    <!-- Mobile Menu -->
+    <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'assets/img/hero/category.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap text-center">
+                        <h2>سبد خرید</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <!-- slider Area End-->
+
+  <!--================Cart Area =================-->
+  <section class="cart_area section_padding">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+          <form method="post" action="{% url 'root:update_cart' %}">
+            {% csrf_token %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">محصول</th>
+                  <th scope="col">قیمت</th>
+                  <th scope="col">تعداد</th>
+                  <th scope="col">جمع</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in cart_items %}
+                  <tr>
+                    <td>
+                      <div class="media">
+                        <div class="d-flex">
+                          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+                        </div>
+                        <div class="media-body">
+                          <p>{{ item.product.name }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <h5>${{ item.product.price }}</h5>
+                    </td>
+                    <td>
+                      <div class="product_count">
+                        <span class="input-number-decrement"> <i class="ti-minus"></i></span>
+                        <input class="input-number" type="number" name="quantity_{{ item.id }}" value="{{ item.quantity }}" min="1" max="10">
+                        <span class="input-number-increment"> <i class="ti-plus"></i></span>
+                      </div>
+                    </td>
+                    <td>
+                      <h5>${{ item.product.price|floatformat:2 }}</h5>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+              <tr class="bottom_button">
+                <td>
+                  <button type="submit" class="btn_1">به‌روزرسانی سبد خرید</button>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <div class="cupon_text float-right">
+                    <a class="btn_1" href="#">بستن کوپن</a>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>
+                  <h5>جمع کل</h5>
+                </td>
+                <td>
+                  <h5>${{ total_price|floatformat:2 }}</h5>
+                </td>
+              </tr>
+              <tr class="shipping_area">
+                <td></td>
+                <td></td>
+                <td>
+                  <h5>هزینه ارسال</h5>
+                </td>
+                <td>
+                  <div class="shipping_box">
+                    <ul class="list">
+                      <li>
+                        نرخ ثابت: $5.00
+                        <input type="radio" aria-label="Radio button for following text input">
+                      </li>
+                      <li>
+                        ارسال رایگان
+                        <input type="radio" aria-label="Radio button for following text input">
+                      </li>
+                      <li>
+                        نرخ ثابت: $10.00
+                        <input type="radio" aria-label="Radio button for following text input">
+                      </li>
+                      <li class="active">
+                        تحویل محلی: $2.00
+                        <input type="radio" aria-label="Radio button for following text input">
+                      </li>
+                    </ul>
+                    <h6>
+                      محاسبه هزینه ارسال
+                      <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </h6>
+                    <select class="shipping_select">
+                      <option value="1">ایران</option>
+                      <option value="2">ترکیه</option>
+                      <option value="4">امارات</option>
+                    </select>
+                    <select class="shipping_select section_bg">
+                      <option value="1">انتخاب استان</option>
+                      <option value="2">تهران</option>
+                      <option value="4">اصفهان</option>
+                    </select>
+                    <input class="post_code" type="text" placeholder="کد پستی" />
+                    <a class="btn_1" href="#">به‌روزرسانی جزئیات</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </form>
+          <div class="checkout_btn_inner float-right">
+            <a class="btn_1" href="#">ادامه خرید</a>
+            <a class="btn_1 checkout_btn_1" href="#">پرداخت</a>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!--================End Cart Area =================-->
+
+  <!-- JavaScript برای دکمه‌های + و - -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInputs = document.querySelectorAll('.input-number');
+        quantityInputs.forEach(input => {
+            const decrementButton = input.previousElementSibling;
+            const incrementButton = input.nextElementSibling;
+
+            decrementButton.addEventListener('click', function() {
+                let currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                }
+            });
+
+            incrementButton.addEventListener('click', function() {
+                let currentValue = parseInt(input.value);
+                if (currentValue < 10) {
+                    input.value = currentValue + 1;
+                }
+            });
+        });
+    });
+  </script>
+{% endblock 'content' %}
