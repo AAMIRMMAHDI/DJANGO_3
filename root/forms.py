@@ -27,3 +27,19 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
+
+
+
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .models import User
+
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['phone', 'password1', 'password2']
+
+class LoginForm(AuthenticationForm):
+    phone = forms.CharField(label='شماره موبایل')
+    password = forms.CharField(label='رمز عبور', widget=forms.PasswordInput)

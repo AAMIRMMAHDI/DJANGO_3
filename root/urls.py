@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import home, product_list, contact, product_detail, add_to_cart, cart, update_cart  ,login ,login_view, register_view ,profile ,logout_view ,about ,search_products
+from .views import (
+    home, product_list, contact, product_detail, add_to_cart, cart, update_cart,
+    login_view, register_view, profile, logout_view, about, search_products
+)
 
 app_name = 'root'
 
@@ -10,14 +13,12 @@ urlpatterns = [
     path('product/<int:product_id>/', product_detail, name='product_detail'),
     path('add-to-cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
     path('cart/', cart, name='cart'),
-    path('update-cart/', update_cart, name='update_cart'),  
-    path('login/', login_view, name='login'),
+    path('update-cart/', update_cart, name='update_cart'),
     path('register/', register_view, name='register'),
+    path('login/', login_view, name='login'),
+    path('verify/<str:phone>/', verify_view, name='verify'),
     path('profile/', profile, name='profile'),
-    path('logout/', logout_view, name='logout'),  # اضافه کردن این خط
-    path('about/', about, name='about'),  # اضافه کردن این خط
-    path('search/', search_products, name='search_products'),  # اضافه کردن این خط
-
-
-
+    path('logout/', logout_view, name='logout'),
+    path('about/', about, name='about'),
+    path('search/', search_products, name='search_products'),
 ]

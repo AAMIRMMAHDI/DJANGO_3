@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام دسته')
@@ -11,11 +12,10 @@ class Category(models.Model):
         verbose_name = 'دسته'
         verbose_name_plural = 'دسته‌ها'
 
-from django.db import models
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام محصول')
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name='دسته‌بندی')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته‌بندی')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='قیمت')
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='قیمت تخفیف')
     is_new = models.BooleanField(default=False, verbose_name='محصول جدید')
@@ -29,9 +29,6 @@ class Product(models.Model):
         verbose_name = 'محصول'
         verbose_name_plural = 'محصولات'
 
-
-
-from django.db import models
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=255)
@@ -48,11 +45,6 @@ class ContactMessage(models.Model):
         verbose_name_plural = "Contact Messages"
 
 
-
-from django.db import models
-from django.contrib.auth.models import User
-from .models import Product  # مدل محصولات شما
-
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
@@ -64,8 +56,6 @@ class Cart(models.Model):
         verbose_name = 'سبد خرید'
         verbose_name_plural = 'سبدهای خرید'
 
-from django.db import models
-from .models import Product, Cart
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, verbose_name='سبد خرید')
@@ -80,11 +70,6 @@ class CartItem(models.Model):
         verbose_name_plural = 'آیتم‌های سبد خرید'
 
 
-
-
-from django.db import models
-from django.contrib.auth.models import User
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
     image = models.ImageField(upload_to='profile_images/', verbose_name='تصویر پروفایل', default='profile_images/default.jpg')
@@ -97,3 +82,17 @@ class Profile(models.Model):
         verbose_name_plural = 'پروفایل‌ها'
 
 
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    phone = models.CharField(max_length=15, unique=True, verbose_name='شماره موبایل')
+    verification_code = models.CharField(max_length=4, blank=True, null=True, verbose_name='کد تایید')
+    is_verified = models.BooleanField(default=False, verbose_name='تایید شده')
+
+    # حذف فیلد username و استفاده از phone به جای آن
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.phone

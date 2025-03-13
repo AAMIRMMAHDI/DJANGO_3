@@ -1,35 +1,40 @@
 from django.shortcuts import render, redirect
-from .models import Category, Product, ContactMessage  # اضافه کردن ContactMessage
-from .forms import ContactForm
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404
-from .models import Product
+from django.contrib.auth import login
+from .models import User
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import User
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Category, Product, ContactMessage, Cart, CartItem, Profile, User
+from .forms import ContactForm, ProfileForm
+import kavenegar
+import random
 
 def home(request):
     return render(request, "root/index.html")
 
-def login(request):
-    return render(request, "form/login.html")
-
 def about(request):
     return render(request, "root/about.html")
-
 
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'پیام شما با موفقیت ارسال شد')  # پیام موفقیت
-            return redirect('root:contact')  # ریدایرکت به همان صفحه
+            messages.success(request, 'پیام شما با موفقیت ارسال شد')
+            return redirect('root:contact')
         else:
-            messages.error(request, 'خطا در ارسال پیام ')  # پیام خطا
+            messages.error(request, 'خطا در ارسال پیام')
     else:
         form = ContactForm()
 
-    context = {
-        'form': form,
-    }
+    context = {'form': form}
     return render(request, "root/contact.html", context)
 
 def product_list(request):
@@ -37,21 +42,9 @@ def product_list(request):
     products = Product.objects.all()
     return render(request, 'root/Catagori.html', {'categories': categories, 'products': products})
 
-
-
-
 def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)  # دریافت محصول بر اساس ID
+    product = get_object_or_404(Product, id=product_id)
     return render(request, 'page/product_detail.html', {'product': product})
-
-
-
-from django.shortcuts import render
-from .models import Cart ,CartItem
-
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .models import Cart, CartItem
 
 @login_required
 def cart(request):
@@ -66,10 +59,6 @@ def cart(request):
     }
     return render(request, 'page/cart.html', context)
 
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from .models import CartItem
-
 @login_required
 def update_cart(request):
     if request.method == 'POST':
@@ -80,10 +69,6 @@ def update_cart(request):
                 cart_item.quantity = int(value)
                 cart_item.save()
     return redirect('root:cart')
-
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Product, Cart, CartItem
 
 @login_required
 def add_to_cart(request, product_id):
@@ -97,57 +82,43 @@ def add_to_cart(request, product_id):
     
     return redirect('root:cart')
 
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'ورود موفقیت‌آمیز بود!')
-            return redirect('root:home')  # تغییر به صفحه اصلی پس از ورود
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            phone = form.cleaned_data.get('phone')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, phone=phone, password=password)
+            if user is not None:
+                verification_code = send_verification_code(user.phone)
+                user.verification_code = verification_code
+                user.save()
+                messages.success(request, 'کد تایید به شماره شما ارسال شد.')
+                return redirect('root:verify', phone=user.phone)
+            else:
+                messages.error(request, 'شماره موبایل یا رمز عبور اشتباه است.')
         else:
-            messages.error(request, 'نام کاربری یا رمز عبور اشتباه است.')
-    
-    return render(request, 'form/login.html')
+            messages.error(request, 'خطا در ورود')
+    else:
+        form = LoginForm()
 
-
-
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib import messages
-
+    return render(request, 'root/login.html', {'form': form})
 def register_view(request):
     if request.method == 'POST':
-        fullname = request.POST.get('fullname')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        
-        # ایجاد کاربر جدید
-        user = User.objects.create_user(username=email, email=email, password=password)
-        user.first_name = fullname
-        user.save()
-        
-        messages.success(request, 'ثبت نام موفقیت‌آمیز بود!')
-        return redirect('root:login')  # تغییر به صفحه ورود پس از ثبت نام
-    
-    return render(request, 'root/login.html')
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            verification_code = send_verification_code(user.phone)
+            user.verification_code = verification_code
+            user.save()
+            messages.success(request, 'کد تایید به شماره شما ارسال شد.')
+            return redirect('root:verify', phone=user.phone)
+        else:
+            messages.error(request, 'خطا در ثبت نام')
+    else:
+        form = RegisterForm()
 
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Profile
-from .forms import ProfileForm
+    return render(request, 'root/register.html', {'form': form})
 
 @login_required
 def profile(request):
@@ -161,53 +132,55 @@ def profile(request):
     else:
         form = ProfileForm(instance=profile)
     
-    context = {
-        'form': form,
-    }
+    context = {'form': form}
     return render(request, 'page/profile.html', context)
-
-
-from django.contrib.auth import logout
 
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('root:home')  # پس از خروج، کاربر به صفحه اصلی هدایت می‌شود
-
-
-
-
-
-
-
-
-
-
-
-from django.http import JsonResponse
-from django.db.models import Q
-from .models import Product
-
-from django.http import JsonResponse
-from django.db.models import Q
-from .models import Product
+    return redirect('root:home')
 
 def search_products(request):
-    query = request.GET.get('q', '')  # دریافت عبارت جستجو
+    query = request.GET.get('q', '')
     if query:
-        # جستجو در نام و توضیحات محصولات
         products = Product.objects.filter(
             Q(name__icontains=query) | Q(description__icontains=query)
         )
     else:
         products = []
 
-    # تبدیل نتایج به فرمت JSON
     results = [{
         'id': product.id,
         'name': product.name,
-        'url': product.get_absolute_url(),  # لینک صفحه محصول
+        'url': product.get_absolute_url(),
         'image': product.image.url if product.image else '',
     } for product in products]
 
     return JsonResponse(results, safe=False)
+
+def send_verification_code(phone):
+    api = kavenegar.KavenegarAPI('YOUR_API_KEY')
+    verification_code = random.randint(1000, 9999)
+    params = {
+        'sender': '10004346',
+        'receptor': phone,
+        'message': f'کد تایید شما: {verification_code}'
+    }
+    response = api.sms_send(params)
+    return verification_code
+
+
+def verify_view(request, phone):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        user = User.objects.filter(phone=phone, verification_code=code).first()
+        if user:
+            user.is_verified = True
+            user.save()
+            login(request, user)
+            messages.success(request, 'ورود موفقیت‌آمیز بود!')
+            return redirect('root:home')
+        else:
+            messages.error(request, 'کد تایید اشتباه است.')
+
+    return render(request, 'root/verify.html', {'phone': phone})
