@@ -11,6 +11,10 @@ def home(request):
 def login(request):
     return render(request, "form/login.html")
 
+def about(request):
+    return render(request, "root/about.html")
+
+
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
