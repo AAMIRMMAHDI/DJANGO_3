@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, product_list, contact, product_detail, add_to_cart, cart, update_cart  ,login ,login_view, register_view ,profile ,logout_view ,about
+from .views import home, product_list, contact, product_detail, add_to_cart, cart, update_cart  ,login ,login_view, register_view ,profile ,logout_view ,about ,search_products
 
 app_name = 'root'
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('logout/', logout_view, name='logout'),  # اضافه کردن این خط
     path('about/', about, name='about'),  # اضافه کردن این خط
+    path('search/', search_products, name='search_products'),  # اضافه کردن این خط
 
 
 

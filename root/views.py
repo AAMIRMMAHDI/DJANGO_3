@@ -173,3 +173,41 @@ from django.contrib.auth import logout
 def logout_view(request):
     logout(request)
     return redirect('root:home')  # پس از خروج، کاربر به صفحه اصلی هدایت می‌شود
+
+
+
+
+
+
+
+
+
+
+
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Product
+
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Product
+
+def search_products(request):
+    query = request.GET.get('q', '')  # دریافت عبارت جستجو
+    if query:
+        # جستجو در نام و توضیحات محصولات
+        products = Product.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+    else:
+        products = []
+
+    # تبدیل نتایج به فرمت JSON
+    results = [{
+        'id': product.id,
+        'name': product.name,
+        'url': product.get_absolute_url(),  # لینک صفحه محصول
+        'image': product.image.url if product.image else '',
+    } for product in products]
+
+    return JsonResponse(results, safe=False)
