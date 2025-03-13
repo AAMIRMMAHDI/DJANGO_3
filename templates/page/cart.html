@@ -86,51 +86,6 @@
                   <h5>${{ total_price|floatformat:2 }}</h5>
                 </td>
               </tr>
-              <tr class="shipping_area">
-                <td></td>
-                <td></td>
-                <td>
-                  <h5>هزینه ارسال</h5>
-                </td>
-                <td>
-                  <div class="shipping_box">
-                    <ul class="list">
-                      <li>
-                        نرخ ثابت: $5.00
-                        <input type="radio" aria-label="Radio button for following text input">
-                      </li>
-                      <li>
-                        ارسال رایگان
-                        <input type="radio" aria-label="Radio button for following text input">
-                      </li>
-                      <li>
-                        نرخ ثابت: $10.00
-                        <input type="radio" aria-label="Radio button for following text input">
-                      </li>
-                      <li class="active">
-                        تحویل محلی: $2.00
-                        <input type="radio" aria-label="Radio button for following text input">
-                      </li>
-                    </ul>
-                    <h6>
-                      محاسبه هزینه ارسال
-                      <i class="fa fa-caret-down" aria-hidden="true"></i>
-                    </h6>
-                    <select class="shipping_select">
-                      <option value="1">ایران</option>
-                      <option value="2">ترکیه</option>
-                      <option value="4">امارات</option>
-                    </select>
-                    <select class="shipping_select section_bg">
-                      <option value="1">انتخاب استان</option>
-                      <option value="2">تهران</option>
-                      <option value="4">اصفهان</option>
-                    </select>
-                    <input class="post_code" type="text" placeholder="کد پستی" />
-                    <a class="btn_1" href="#">به‌روزرسانی جزئیات</a>
-                  </div>
-                </td>
-              </tr>
             </table>
           </form>
           <div class="checkout_btn_inner float-right">
@@ -141,29 +96,4 @@
       </div>
   </section>
   <!--================End Cart Area =================-->
-
-  <!-- JavaScript برای دکمه‌های + و - -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const quantityInputs = document.querySelectorAll('.input-number');
-        quantityInputs.forEach(input => {
-            const decrementButton = input.previousElementSibling;
-            const incrementButton = input.nextElementSibling;
-
-            decrementButton.addEventListener('click', function() {
-                let currentValue = parseInt(input.value);
-                if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                }
-            });
-
-            incrementButton.addEventListener('click', function() {
-                let currentValue = parseInt(input.value);
-                if (currentValue < 10) {
-                    input.value = currentValue + 1;
-                }
-            });
-        });
-    });
-  </script>
 {% endblock 'content' %}

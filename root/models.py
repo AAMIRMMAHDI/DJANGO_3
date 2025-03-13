@@ -47,12 +47,12 @@ class ContactMessage(models.Model):
 
 
 
-
 from django.db import models
 from django.contrib.auth.models import User
+from .models import Product  # مدل محصولات شما
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
 
     def __str__(self):
@@ -73,3 +73,20 @@ class CartItem(models.Model):
     class Meta:
         verbose_name = 'آیتم سبد خرید'
         verbose_name_plural = 'آیتم‌های سبد خرید'
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    image = models.ImageField(upload_to='profile_images/', verbose_name='تصویر پروفایل', default='profile_images/default.jpg')
+
+    def __str__(self):
+        return f"پروفایل کاربر {self.user.username}"
+
+    class Meta:
+        verbose_name = 'پروفایل'
+        verbose_name_plural = 'پروفایل‌ها'
