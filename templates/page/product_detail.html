@@ -40,7 +40,7 @@
                                 <p>Quantity</p>
                                 <div class="product_count d-inline-block">
                                     <span class="product_count_item inumber-decrement"> <i class="ti-minus"></i></span>
-                                    <input class="product_count_item input-number" type="text" value="1" min="0" max="10">
+                                    <input class="product_count_item input-number" type="number" name="quantity" value="1" min="1" max="10">
                                     <span class="product_count_item number-increment"> <i class="ti-plus"></i></span>
                                 </div>
                                 <p>${{ product.price }}</p>
@@ -49,7 +49,11 @@
                                 {% endif %}
                             </div>
                             <div class="add_to_cart">
-                                <a href="{% url 'root:add_to_cart' product.id %}" class="btn_3">Add to cart</a>
+                                <form method="post" action="{% url 'root:add_to_cart' product.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="quantity" id="quantity_input" value="1">
+                                    <button type="submit" class="btn_3">Add to cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -59,22 +63,39 @@
     </div>
     <!--================End Single Product Area =================-->
 
-    <!-- subscribe part here -->
-    <section class="subscribe_part section_padding">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="subscribe_part_content">
-                        <h2>Get promotions & updates!</h2>
-                        <p>Seamlessly empower fully researched growth strategies and interoperable internal or “organic” sources credibly innovate granular internal .</p>
-                        <div class="subscribe_form">
-                            <input type="email" placeholder="Enter your mail">
-                            <a href="#" class="btn_1">Subscribe</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- subscribe part end -->
+    <!-- اسکریپت برای مدیریت مقدار quantity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.querySelector('.input-number');
+            const quantityHiddenInput = document.getElementById('quantity_input');
+            const decrementButton = document.querySelector('.inumber-decrement');
+            const incrementButton = document.querySelector('.number-increment');
+
+            // کاهش مقدار quantity
+            decrementButton.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                    quantityHiddenInput.value = quantityInput.value;
+                }
+            });
+
+            // افزایش مقدار quantity
+            incrementButton.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                if (currentValue < 10) {
+                    quantityInput.value = currentValue + 1;
+                    quantityHiddenInput.value = quantityInput.value;
+                }
+            });
+
+            // تغییر مقدار quantity هنگام تایپ دستی
+            quantityInput.addEventListener('input', function() {
+                let currentValue = parseInt(quantityInput.value);
+                if (currentValue < 1) quantityInput.value = 1;
+                if (currentValue > 10) quantityInput.value = 10;
+                quantityHiddenInput.value = quantityInput.value;
+            });
+        });
+    </script>
 {% endblock 'content' %}

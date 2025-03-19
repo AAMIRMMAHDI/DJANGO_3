@@ -30,16 +30,10 @@ class ProfileForm(forms.ModelForm):
 
 
 
-
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User
 
-class RegisterForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ['phone', 'password1', 'password2']
-
-class LoginForm(AuthenticationForm):
-    phone = forms.CharField(label='شماره موبایل')
-    password = forms.CharField(label='رمز عبور', widget=forms.PasswordInput)
+class ChangePasswordForm(forms.Form):
+    email = forms.EmailField(label='ایمیل', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    verification_code = forms.CharField(label='کد تأیید', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    new_password = forms.CharField(label='رمز عبور جدید', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    confirm_password = forms.CharField(label='تکرار رمز عبور جدید', widget=forms.PasswordInput(attrs={'class': 'form-control'}))

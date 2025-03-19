@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-s$2c8jt38uo5iz^-)ka9=rs+5-!ul%c$c&u5p!ph-_q-10f^1e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -123,6 +123,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'  # دایرکتوری‌های اضافه برای فایل‌های استاتیک
 ]
+
+# settings.py
+
+# تنظیمات ایمیل برای نمایش در کنسول
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Default primary key field type

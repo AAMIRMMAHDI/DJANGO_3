@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block 'content' %}
+<section class="order_confirmation_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>سفارش شما با موفقیت ثبت شد!</h2>
+                <p>شماره سفارش: #{{ order.id }}</p>
+                <p>جمع کل: ${{ order.total_price|floatformat:2 }}</p>
+                <p>وضعیت: {{ order.get_status_display }}</p>
+                <a href="{% url 'root:order_history' %}" class="btn_1">مشاهده سفارشات</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

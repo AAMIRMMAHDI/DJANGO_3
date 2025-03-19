@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block 'content' %}
+<div class="container">
+    <h2>تأیید کد</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="verification_code">کد تأیید</label>
+            <input type="text" name="verification_code" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">تأیید</button>
+    </form>
+</div>
+{% endblock %}

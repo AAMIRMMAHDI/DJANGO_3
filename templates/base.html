@@ -51,7 +51,7 @@
                                             {% endif %}
                                         </li>
                                         <li><a href="{% url 'root:product_list' %}">Wish List</a></li>
-                                        <li><a href="{% url 'root:cart' %}">Cart</a></li>
+                                        <li><a href="{% url 'root:cart' %}">Cart//{{ request.user.cart.cartitem_set.count }}</a></li>
                                         <li><a href="#">Checkout</a></li>
                                     </ul>
                                 </div>
@@ -83,11 +83,11 @@
                                     <nav>                                                
                                         <ul id="navigation">                                                                                                                                     
                                             <li><a href="{% url 'root:home' %}">Home</a></li>
-                                            <li><a href="{% url 'root:product_list' %}">Catagori</a></li>
+                                            <li><a href="{% url 'root:product_list' %}">Products</a></li>
                                             <li><a href="#">Pages</a>
                                                 <ul class="submenu">
                                                     <li><a href="{% url 'root:cart' %}">Shopping Cart</a></li>
-                                                    <li><a href="#">Confirmation</a></li>
+                                                    <li><a href="{% url 'root:order_history' %}">Confirmation</a></li>
                                                     <li><a href="{% url 'root:product_list' %}">Product Checkout</a></li>
                                                     <li><a href="{% url 'root:about' %}">About</a></li>
                                                 </ul>
@@ -99,25 +99,17 @@
                             </div> 
                             <div class="col-xl-5 col-lg-3 col-md-3 col-sm-3 fix-card">
                                 <ul class="header-right f-right d-none d-lg-block d-flex justify-content-between">
-                                    <li class="d-none d-xl-block">
-                                        <div class="form-box f-right">
-                                            <input type="text" id="search-input" name="Search" placeholder="Search products">
-                                            <div class="search-icon">
-                                                <i class="fas fa-search special-tag"></i>
-                                            </div>
-                                            <!-- نمایش نتایج جستجو -->
-                                            <div id="search-results" style="position: absolute; background: white; border: 1px solid #ddd; z-index: 1000; width: 100%;"></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="shopping-card">
-                                            <a href="{% url 'root:cart' %}"><i class="fas fa-shopping-cart"></i></a>
-                                            <span class="cart-count">{{ request.user.cart.cartitem_set.count }}</span>
-                                        </div>
-                                    </li>
                                     <li class="d-none d-lg-block">
                                         {% if user.is_authenticated %}
-                                            <a href="{% url 'root:profile' %}" class="btn header-btn">{{ user.first_name }}</a>
+                                            <!-- نمایش عکس پروفایل -->
+                                            <a href="{% url 'root:profile' %}" style="margin-right: 10px;">
+                                                {% if user.profile.image %}
+                                                    <img src="{{ user.profile.image.url }}" alt="Profile Image" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                {% else %}
+                                                    <img src="{% static 'assets/img/default_profile.png' %}" alt="Default Profile" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                {% endif %}
+                                            </a>
+                                            <!-- دکمه خروج -->
                                             <a href="{% url 'root:logout' %}" class="btn header-btn" style="background-color: #ff0000; color: #fff;">خروج</a>
                                         {% else %}
                                             <a href="{% url 'root:login' %}" class="btn header-btn">Sign in</a>

@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{% endblock title %}
+{% block title %}صفحه اصلی{% endblock title %}
 {% block 'content' %}
-
     <main>
-
         <!-- slider Area Start -->
         <div class="slider-area ">
             <!-- Mobile Menu -->
@@ -31,31 +29,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="single-slider slider-height" data-background="{% static 'assets/img/hero/h1_hero.jpg' %}">
-                    <div class="container">
-                        <div class="row d-flex align-items-center justify-content-between">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-none d-md-block">
-                                <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
-                                    <img src="{% static 'assets/img/hero/hero_man.png' %}" alt="">
-                                </div>
-                            </div>
-                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8">
-                                <div class="hero__caption">
-                                    <span data-animation="fadeInRight" data-delay=".4s">60% Discount</span>
-                                    <h1 data-animation="fadeInRight" data-delay=".6s">Winter <br> Collection</h1>
-                                    <p data-animation="fadeInRight" data-delay=".8s">Best Cloth Collection By 2020!</p>
-                                    <!-- Hero-btn -->
-                                    <div class="hero__btn" data-animation="fadeInRight" data-delay="1s">
-                                        <a href="industries.html" class="btn hero-btn">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <!-- slider Area End-->
+
         <!-- Category Area Start-->
         <section class="category-area section-padding30">
             <div class="container-fluid">
@@ -68,46 +45,20 @@
                     </div>
                 </div>
                 <div class="row">
+                    <!-- نمایش عکس‌ها از دیتابیس -->
+                    {% for ab in abs %}
                     <div class="col-xl-4 col-lg-6">
                         <div class="single-category mb-30">
                             <div class="category-img">
-                                <img src="{% static 'assets/img/categori/cat1.jpg' %}" alt="">
-                                <div class="category-caption">
-                                    <h2>Owmen`s</h2>
-                                    <span class="best"><a href="#">Best New Deals</a></span>
-                                    <span class="collection">New Collection</span>
-                                </div>
+                                <img src="{{ ab.image.url }}" alt="{{ ab.image.name }}">  <!-- نمایش عکس از دیتابیس -->
                             </div>
                         </div>
                     </div>
-                     <div class="col-xl-4 col-lg-6">
-                        <div class="single-category mb-30">
-                            <div class="category-img text-center">
-                                <img src="{% static 'assets/img/categori/cat2.jpg' %}" alt="">
-                                <div class="category-caption">
-                                    <span class="collection">Discount!</span>
-                                    <h2>Winter Cloth</h2>
-                                   <p>New Collection</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="single-category mb-30">
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/categori/cat3.jpg' %}" alt="">
-                                <div class="category-caption">
-                                    <h2>Man`s Cloth</h2>
-                                    <span class="best"><a href="#">Best New Deals</a></span>
-                                    <span class="collection">New Collection</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
-        <!-- Category Area End-->
+
         <!-- Latest Products Start -->
         <section class="latest-product-area padding-bottom">
             <div class="container">
@@ -123,10 +74,10 @@
                             <!--Nav Button  -->
                             <nav>                                                                                                
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
-                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">New</a>
-                                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Featured</a>
-                                    <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">Offer</a>
+                                    <a class="nav-item nav-link active" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="true">All</a>
+                                    {% for category in categories %}
+                                    <a class="nav-item nav-link" id="nav-{{ category.id }}-tab" data-toggle="tab" href="#nav-{{ category.id }}" role="tab" aria-controls="nav-{{ category.id }}" aria-selected="false">{{ category.name }}</a>
+                                    {% endfor %}
                                 </div>
                             </nav>
                             <!--End Nav Button  -->
@@ -135,12 +86,8 @@
                 </div>
                 <!-- Nav Card -->
                 <div class="tab-content" id="nav-tabContent">
-                    <!-- card one -->
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        <div class="row">
-                            <div class="tab-content" id="nav-tabContent">
-                    <!-- card one -->
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <!-- تب "همه" -->
+                    <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
                         <div class="row">
                             {% for product in products %}
                             <div class="col-xl-4 col-lg-4 col-md-6">
@@ -161,7 +108,8 @@
                                             <i class="far fa-star low-star"></i>
                                             <i class="far fa-star low-star"></i>
                                         </div>
-                                        <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>                                        <div class="price">
+                                        <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
+                                        <div class="price">
                                             <ul>
                                                 <li>${{ product.price }}</li>
                                                 {% if product.discount_price %}
@@ -175,105 +123,55 @@
                             {% endfor %}
                         </div>
                     </div>
+
+                    <!-- تب‌های دسته‌بندی‌ها -->
+                    {% for category in categories %}
+                    <div class="tab-pane fade" id="nav-{{ category.id }}" role="tabpanel" aria-labelledby="nav-{{ category.id }}-tab">
+                        <div class="row">
+                            {% for product in products %}
+                                {% if product.category.id == category.id %}
+                                <div class="col-xl-4 col-lg-4 col-md-6">
+                                    <div class="single-product mb-60">
+                                        <div class="product-img">
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                            {% if product.is_new %}
+                                            <div class="new-product">
+                                                <span>New</span>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-caption">
+                                            <div class="product-ratting">
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star low-star"></i>
+                                                <i class="far fa-star low-star"></i>
+                                            </div>
+                                            <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
+                                            <div class="price">
+                                                <ul>
+                                                    <li>${{ product.price }}</li>
+                                                    {% if product.discount_price %}
+                                                    <li class="discount">${{ product.discount_price }}</li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
                 <!-- End Nav Card -->
             </div>
         </section>
         <!-- Latest Products End -->
-        <!-- Best Product Start -->
-        <div class="best-product-area lf-padding" >
-           <div class="product-wrapper bg-height" style="background-image: url('{% static 'assets/img/categori/card.png' %}')">
-                <div class="container position-relative">
-                    <div class="row justify-content-between align-items-end">
-                        <div class="product-man position-absolute  d-none d-lg-block">
-                            <img src="{% static 'assets/img/categori/card-man.png' %}" alt="">
-                        </div>
-                        <div class="col-xl-2 col-lg-2 col-md-2 d-none d-lg-block">
-                            <div class="vertical-text">
-                                <span>Manz</span>
-                            </div>
-                        </div>
-                        <div class="col-xl-8 col-lg-8">
-                            <div class="best-product-caption">
-                                <h2>Find The Best Product<br> from Our Shop</h2>
-                                <p>Designers who are interesten creating state ofthe.</p>
-                                <a href="#" class="black-btn">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-           </div>
-           <!-- Shape -->
-           <div class="shape bounce-animate d-none d-md-block">
-               <img src="{% static 'assets/img/categori/card-shape.png' %}" alt="">
-           </div>
-        </div>
-        <!-- Best Product End-->
-        <!-- Best Collection Start -->
-        <div class="best-collection-area section-padding2">
-            <div class="container">
-                <div class="row d-flex justify-content-between align-items-end">
-                    <!-- Left content -->
-                    <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="best-left-cap">
-                            <h2>Best Collection of This Month</h2>
-                            <p>Designers who are interesten crea.</p>
-                            <a href="#" class="btn shop1-btn">Shop Now</a>
-                        </div>
-                        <div class="best-left-img mb-30 d-none d-sm-block">
-                            <img src="{% static 'assets/img/collection/collection1.png' %}" alt="">
-                        </div>
-                    </div>
-                    <!-- Mid Img -->
-                     <div class="col-xl-2 col-lg-2 d-none d-lg-block">
-                        <div class="best-mid-img mb-30 ">
-                            <img src="{% static 'assets/img/collection/collection2.png' %}" alt="">
-                        </div>
-                    </div>
-                    <!-- Riht Caption -->
-                    <div class="col-xl-4 col-lg-6 col-md-6">
-                        <div class="best-right-cap ">
-                           <div class="best-single mb-30">
-                               <div class="single-cap">
-                                   <h4>Menz Winter<br> Jacket</h4>
-                               </div>
-                               <div class="single-img">
-                                  <img src="{% static 'assets/img/collection/collection3.png' %}" alt="">
-                               </div>
-                           </div>
-                        </div>
-                        <div class="best-right-cap">
-                           <div class="best-single mb-30">
-                               <div class="single-cap active">
-                                   <h4>Menz Winter<br>Jacket</h4>
-                               </div>
-                               <div class="single-img">
-                                  <img src="{% static 'assets/img/collection/collection4.png' %}" alt="">
-                               </div>
-                           </div>
-                        </div>
-                        <div class="best-right-cap">
-                           <div class="best-single mb-30">
-                               <div class="single-cap">
-                                   <h4>Menz Winter<br> Jacket</h4>
-                               </div>
-                               <div class="single-img">
-                                  <img src="{% static 'assets/img/collection/collection5.png' %}" alt="">
-                               </div>
-                           </div>
-                        </div>
-                        
-                    </div> 
-                </div>
-            </div>
-        </div>
-        <!-- Best Collection End -->
-        <!-- Latest Offers Start -->
-        <!-- Latest Offers End -->
 
-
-
+        <!-- سایر بخش‌های صفحه -->
+        <!-- ... -->
     </main>
-
-
-    {% endblock 'content' %}
+{% endblock 'content' %}

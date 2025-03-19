@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}محصولات{% endblock title %}
+{% block 'content' %}
+    <main>
+        <!-- slider Area Start-->
+        <div class="slider-area ">
+            <!-- Mobile Menu -->
+            <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'assets/img/hero/category.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>دسته‌بندی محصولات</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- slider Area End-->
+
+        <!-- Latest Products Start -->
+        <section class="latest-product-area latest-padding">
+            <div class="container">
+                <div class="row product-btn d-flex justify-content-between">
+                    <div class="properties__button">
+                        <!--Nav Button  -->
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <!-- لینک "همه" برای نمایش تمام محصولات -->
+                                <a class="nav-item nav-link {% if not selected_category %}active{% endif %}" 
+                                   id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="{% if not selected_category %}true{% else %}false{% endif %}">
+                                    همه
+                                </a>
+                                <!-- نمایش دسته‌بندی‌ها -->
+                                {% for category in categories %}
+                                    <a class="nav-item nav-link {% if selected_category == category.id|stringformat:'s' %}active{% endif %}" 
+                                       id="nav-{{ category.id }}-tab" data-toggle="tab" href="#nav-{{ category.id }}" role="tab" aria-controls="nav-{{ category.id }}" aria-selected="{% if selected_category == category.id|stringformat:'s' %}true{% else %}false{% endif %}">
+                                        {{ category.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </nav>
+                        <!--End Nav Button  -->
+                    </div>
+                </div>
+                
+                <!-- Nav Card -->
+                <div class="tab-content" id="nav-tabContent">
+                    <!-- تب "همه" -->
+                    <div class="tab-pane fade {% if not selected_category %}show active{% endif %}" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+                        <div class="row">
+                            {% for product in products %}
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <div class="single-product mb-60">
+                                    <div class="product-img">
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                        {% if product.is_new %}
+                                        <div class="new-product">
+                                            <span>New</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="product-caption">
+                                        <div class="product-ratting">
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star low-star"></i>
+                                            <i class="far fa-star low-star"></i>
+                                        </div>
+                                        <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
+                                        <div class="price">
+                                            <ul>
+                                                <li>${{ product.price }}</li>
+                                                {% if product.discount_price %}
+                                                <li class="discount">${{ product.discount_price }}</li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- تب‌های دسته‌بندی‌ها -->
+                    {% for category in categories %}
+                    <div class="tab-pane fade {% if selected_category == category.id|stringformat:'s' %}show active{% endif %}" id="nav-{{ category.id }}" role="tabpanel" aria-labelledby="nav-{{ category.id }}-tab">
+                        <div class="row">
+                            {% for product in products %}
+                                {% if product.category.id == category.id %}
+                                <div class="col-xl-4 col-lg-4 col-md-6">
+                                    <div class="single-product mb-60">
+                                        <div class="product-img">
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                            {% if product.is_new %}
+                                            <div class="new-product">
+                                                <span>New</span>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-caption">
+                                            <div class="product-ratting">
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star low-star"></i>
+                                                <i class="far fa-star low-star"></i>
+                                            </div>
+                                            <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
+                                            <div class="price">
+                                                <ul>
+                                                    <li>${{ product.price }}</li>
+                                                    {% if product.discount_price %}
+                                                    <li class="discount">${{ product.discount_price }}</li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- End Nav Card -->
+            </div>
+        </section>
+    </main>
+{% endblock 'content' %}

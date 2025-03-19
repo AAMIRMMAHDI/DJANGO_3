@@ -2,6 +2,7 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام دسته')
+    image = models.ImageField(upload_to='categories/', verbose_name='تصویر')  # اضافه کردن فیلد تصویر
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name='دسته والد')
 
     def __str__(self):
@@ -11,11 +12,18 @@ class Category(models.Model):
         verbose_name = 'دسته'
         verbose_name_plural = 'دسته‌ها'
 
+
 from django.db import models
+
+class ab(models.Model):
+    image = models.ImageField(upload_to='abs/', verbose_name='تصویر')  # اضافه کردن فیلد تصویر
+
+    def __str__(self):
+        return self.image.name  # بازگرداندن نام فایل تصویر به عنوان رشته
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام محصول')
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name='دسته‌بندی')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته‌بندی')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='قیمت')
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='قیمت تخفیف')
     is_new = models.BooleanField(default=False, verbose_name='محصول جدید')
@@ -28,7 +36,6 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'محصول'
         verbose_name_plural = 'محصولات'
-
 
 
 from django.db import models
@@ -86,15 +93,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='کاربر')
-    image = models.ImageField(upload_to='profile_images/', verbose_name='تصویر پروفایل', default='profile_images/default.jpg')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='profile_images/', default='default_profile.png')
 
     def __str__(self):
-        return f"پروفایل کاربر {self.user.username}"
-
-    class Meta:
-        verbose_name = 'پروفایل'
-        verbose_name_plural = 'پروفایل‌ها'
+        return f'{self.user.username} Profile'
 
 
 
@@ -106,3 +109,42 @@ class User(models.Model):
     password = models.CharField(max_length=128)
     verification_code = models.CharField(max_length=4, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from .models import Product
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='جمع کل')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'در حال انتظار'),
+        ('completed', 'تکمیل شده'),
+        ('canceled', 'لغو شده'),
+    ], default='pending', verbose_name='وضعیت')
+
+    def __str__(self):
+        return f"سفارش #{self.id} توسط {self.user.username}"
+
+    class Meta:
+        verbose_name = 'سفارش'
+        verbose_name_plural = 'سفارشات'
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='سفارش')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
+    quantity = models.PositiveIntegerField(verbose_name='تعداد')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='قیمت')
+
+    def __str__(self):
+        return f"{self.quantity} عدد {self.product.name} در سفارش #{self.order.id}"
+
+    class Meta:
+        verbose_name = 'آیتم سفارش'
+        verbose_name_plural = 'آیتم‌های سفارش'

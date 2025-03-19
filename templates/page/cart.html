@@ -33,6 +33,7 @@
                   <th scope="col">قیمت</th>
                   <th scope="col">تعداد</th>
                   <th scope="col">جمع</th>
+                  <th scope="col">عملیات</th> <!-- ستون جدید برای دکمه لغو کالا -->
                 </tr>
               </thead>
               <tbody>
@@ -59,7 +60,11 @@
                       </div>
                     </td>
                     <td>
-                      <h5>${{ item.product.price|floatformat:2 }}</h5>
+                      <h5>${{ item.total_price|floatformat:2 }}</h5>
+                    </td>
+                    <td>
+                      <!-- دکمه لغو کالا -->
+                      <a href="{% url 'root:remove_from_cart' item.id %}" class="btn btn-danger btn-sm">لغو کالا</a>
                     </td>
                   </tr>
                 {% endfor %}
@@ -71,9 +76,6 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <div class="cupon_text float-right">
-                    <a class="btn_1" href="#">بستن کوپن</a>
-                  </div>
                 </td>
               </tr>
               <tr>
@@ -89,11 +91,12 @@
             </table>
           </form>
           <div class="checkout_btn_inner float-right">
-            <a class="btn_1" href="#">ادامه خرید</a>
-            <a class="btn_1 checkout_btn_1" href="#">پرداخت</a>
+            <a class="btn_1" href="{% url 'root:product_list' %}">ادامه خرید</a>
+            <a class="btn_1 checkout_btn_1" href="{% url 'root:checkout' %}">پرداخت</a>
           </div>
         </div>
       </div>
+    </div>
   </section>
   <!--================End Cart Area =================-->
 {% endblock 'content' %}

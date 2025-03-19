@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block 'content' %}
+<section class="order_detail_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>جزئیات سفارش #{{ order.id }}</h2>
+                <p>وضعیت: {{ order.get_status_display }}</p>
+                <p>جمع کل: ${{ order.total_price|floatformat:2 }}</p>
+                <p>تاریخ سفارش: {{ order.created_at }}</p>
+
+                <h3>آیتم‌های سفارش</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>محصول</th>
+                            <th>تعداد</th>
+                            <th>قیمت واحد</th>
+                            <th>جمع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>${{ item.price|floatformat:2 }}</td>
+                                <td>${{ item.total_price|floatformat:2 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{% url 'root:order_history' %}" class="btn_1">بازگشت به تاریخچه سفارشات</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
