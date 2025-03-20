@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}صفحه اصلی{% endblock title %}
+{% block title %}Home{% endblock title %}
 {% block 'content' %}
     <main>
-        <!-- slider Area Start -->
         <div class="slider-area ">
-            <!-- Mobile Menu -->
             <div class="slider-active">
                 <div class="single-slider slider-height" data-background="{% static 'assets/img/hero/h1_hero.jpg' %}">
                     <div class="container">
@@ -17,12 +15,10 @@
                             </div>
                             <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8">
                                 <div class="hero__caption">
-                                    <span data-animation="fadeInRight" data-delay=".4s">60% Discount</span>
                                     <h1 data-animation="fadeInRight" data-delay=".6s">Winter <br> Collection</h1>
-                                    <p data-animation="fadeInRight" data-delay=".8s">Best Cloth Collection By 2020!</p>
-                                    <!-- Hero-btn -->
+                                    <p data-animation="fadeInRight" data-delay=".8s">Best Cloth Collection By 2027!</p>
                                     <div class="hero__btn" data-animation="fadeInRight" data-delay="1s">
-                                        <a href="industries.html" class="btn hero-btn">Shop Now</a>
+                                        <a href="{% url 'root:login' %}" class="btn hero-btn">Shop Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -31,12 +27,9 @@
                 </div>
             </div>
         </div>
-        <!-- slider Area End-->
 
-        <!-- Category Area Start-->
         <section class="category-area section-padding30">
             <div class="container-fluid">
-                <!-- Section Tittle -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-tittle text-center mb-85">
@@ -45,12 +38,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- نمایش عکس‌ها از دیتابیس -->
                     {% for ab in abs %}
                     <div class="col-xl-4 col-lg-6">
                         <div class="single-category mb-30">
                             <div class="category-img">
-                                <img src="{{ ab.image.url }}" alt="{{ ab.image.name }}">  <!-- نمایش عکس از دیتابیس -->
+                                <img src="{{ ab.image.url }}" alt="{{ ab.image.name }}">
                             </div>
                         </div>
                     </div>
@@ -58,120 +50,5 @@
                 </div>
             </div>
         </section>
-
-        <!-- Latest Products Start -->
-        <section class="latest-product-area padding-bottom">
-            <div class="container">
-                <div class="row product-btn d-flex justify-content-end align-items-end">
-                    <!-- Section Tittle -->
-                    <div class="col-xl-4 col-lg-5 col-md-5">
-                        <div class="section-tittle mb-30">
-                            <h2>Latest Products</h2>
-                        </div>
-                    </div>
-                    <div class="col-xl-8 col-lg-7 col-md-7">
-                        <div class="properties__button f-right">
-                            <!--Nav Button  -->
-                            <nav>                                                                                                
-                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <a class="nav-item nav-link active" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="true">All</a>
-                                    {% for category in categories %}
-                                    <a class="nav-item nav-link" id="nav-{{ category.id }}-tab" data-toggle="tab" href="#nav-{{ category.id }}" role="tab" aria-controls="nav-{{ category.id }}" aria-selected="false">{{ category.name }}</a>
-                                    {% endfor %}
-                                </div>
-                            </nav>
-                            <!--End Nav Button  -->
-                        </div>
-                    </div>
-                </div>
-                <!-- Nav Card -->
-                <div class="tab-content" id="nav-tabContent">
-                    <!-- تب "همه" -->
-                    <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-                        <div class="row">
-                            {% for product in products %}
-                            <div class="col-xl-4 col-lg-4 col-md-6">
-                                <div class="single-product mb-60">
-                                    <div class="product-img">
-                                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                                        {% if product.is_new %}
-                                        <div class="new-product">
-                                            <span>New</span>
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="product-caption">
-                                        <div class="product-ratting">
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star low-star"></i>
-                                            <i class="far fa-star low-star"></i>
-                                        </div>
-                                        <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
-                                        <div class="price">
-                                            <ul>
-                                                <li>${{ product.price }}</li>
-                                                {% if product.discount_price %}
-                                                <li class="discount">${{ product.discount_price }}</li>
-                                                {% endif %}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <!-- تب‌های دسته‌بندی‌ها -->
-                    {% for category in categories %}
-                    <div class="tab-pane fade" id="nav-{{ category.id }}" role="tabpanel" aria-labelledby="nav-{{ category.id }}-tab">
-                        <div class="row">
-                            {% for product in products %}
-                                {% if product.category.id == category.id %}
-                                <div class="col-xl-4 col-lg-4 col-md-6">
-                                    <div class="single-product mb-60">
-                                        <div class="product-img">
-                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                                            {% if product.is_new %}
-                                            <div class="new-product">
-                                                <span>New</span>
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="product-caption">
-                                            <div class="product-ratting">
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star low-star"></i>
-                                                <i class="far fa-star low-star"></i>
-                                            </div>
-                                            <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
-                                            <div class="price">
-                                                <ul>
-                                                    <li>${{ product.price }}</li>
-                                                    {% if product.discount_price %}
-                                                    <li class="discount">${{ product.discount_price }}</li>
-                                                    {% endif %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <!-- End Nav Card -->
-            </div>
-        </section>
-        <!-- Latest Products End -->
-
-        <!-- سایر بخش‌های صفحه -->
-        <!-- ... -->
     </main>
 {% endblock 'content' %}

@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Products{% endblock title %}
+
+{% block 'content' %}
+    <style>
+        .search-bar {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .search-bar form {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            width: 300px;
+        }
+
+        .search-bar button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .search-bar .btn-secondary {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .search-bar .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .single-product {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .single-product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            position: relative;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: auto;
+        }
+
+        .new-product {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .product-caption {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-ratting {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        .product-caption h4 a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .product-caption h4 a:hover {
+            color: #007bff;
+        }
+
+        .price ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .price ul li {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+
+    <main>
+        <div class="slider-area ">
+            <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'assets/img/hero/category.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Product Categories</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <form method="GET" action="{% url 'root:product_list' %}">
+                <input type="text" name="q" placeholder="Search products...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <section class="latest-product-area latest-padding">
+            <div class="container">
+                <div class="row product-btn d-flex justify-content-between">
+                    <div class="properties__button">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link {% if not selected_category %}active{% endif %}" 
+                                   id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="{% if not selected_category %}true{% else %}false{% endif %}">
+                                    All
+                                </a>
+                                {% for category in categories %}
+                                    <a class="nav-item nav-link {% if selected_category == category.id|stringformat:'s' %}active{% endif %}" 
+                                       id="nav-{{ category.id }}-tab" data-toggle="tab" href="#nav-{{ category.id }}" role="tab" aria-controls="nav-{{ category.id }}" aria-selected="{% if selected_category == category.id|stringformat:'s' %}true{% else %}false{% endif %}">
+                                        {{ category.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade {% if not selected_category %}show active{% endif %}" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+                        <div class="row">
+                            {% for product in products %}
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <div class="single-product mb-60">
+                                    <div class="product-img">
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    </div>
+                                    <div class="product-caption">
+                                        <div class="product-ratting">
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star low-star"></i>
+                                            <i class="far fa-star low-star"></i>
+                                        </div>
+                                        <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
+                                        <div class="price">
+                                            <ul>
+                                                <li>${{ product.price }}</li>
+                                                {% if product.discount_price %}
+                                                <li class="discount">${{ product.discount_price }}</li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% for category in categories %}
+                    <div class="tab-pane fade {% if selected_category == category.id|stringformat:'s' %}show active{% endif %}" id="nav-{{ category.id }}" role="tabpanel" aria-labelledby="nav-{{ category.id }}-tab">
+                        <div class="row">
+                            {% for product in products %}
+                                {% if product.category.id == category.id %}
+                                <div class="col-xl-4 col-lg-4 col-md-6">
+                                    <div class="single-product mb-60">
+                                        <div class="product-img">
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                            {% if product.is_new %}
+                                            <div class="new-product">
+                                                <span>New</span>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-caption">
+                                            <div class="product-ratting">
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star low-star"></i>
+                                                <i class="far fa-star low-star"></i>
+                                            </div>
+                                            <h4><a href="{% url 'root:product_detail' product.id %}">{{ product.name }}</a></h4>
+                                            <div class="price">
+                                                <ul>
+                                                    <li>${{ product.price }}</li>
+                                                    {% if product.discount_price %}
+                                                    <li class="discount">${{ product.discount_price }}</li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock 'content' %}

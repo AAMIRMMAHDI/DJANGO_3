@@ -33,14 +33,7 @@
                     <div class="container-fluid">
                         <div class="col-xl-12">
                             <div class="row d-flex justify-content-between align-items-center">
-                                <div class="header-info-left d-flex">
-                                    <div class="flag">
-                                        <img src="{% static 'assets/img/icon/header_icon.png' %}" alt="">
-                                    </div>
-                                    <ul class="contact-now">     
-                                        <li>+777 2345 7886</li>
-                                    </ul>
-                                </div>
+
                                 <div class="header-info-right">
                                     <ul>                                          
                                         <li>
@@ -104,7 +97,7 @@
                                             <!-- نمایش عکس پروفایل -->
                                             <a href="{% url 'root:profile' %}" style="margin-right: 10px;">
                                                 {% if user.profile.image %}
-                                                    <img src="{{ user.profile.image.url }}" alt="Profile Image" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <img src="{{ user.profile.image.url }}" alt="Profile Image" style="width: 70px; height: 70px; border-radius: 50%;">
                                                 {% else %}
                                                     <img src="{% static 'assets/img/default_profile.png' %}" alt="Default Profile" style="width: 40px; height: 40px; border-radius: 50%;">
                                                 {% endif %}

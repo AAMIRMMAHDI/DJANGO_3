@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block 'content' %}
+    <div class="container" style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+        <form style="background: linear-gradient(135deg, #c3d1ea, #d8e4f7); padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center;">
+            <a href="{% url 'root:login' %}" style="display: inline-block; padding: 15px 600px; font-size: 20px; color: white; background-color: #69abf0; text-decoration: none; border: none; border-radius: 8px; transition: background-color 0.3s, transform 0.3s; cursor: pointer;">
+                LOGIN
+            </a>
+            <p style="margin-top: 20px; font-size: 24px; color: white;">NOT LOGIN</p>
+        </form>
+    </div>
+{% endblock 'content' %}

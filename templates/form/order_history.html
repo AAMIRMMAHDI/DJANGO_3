@@ -4,15 +4,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h2>تاریخچه سفارشات</h2>
+                <h2>Order History</h2>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>شماره سفارش</th>
-                            <th>تاریخ</th>
-                            <th>جمع کل</th>
-                            <th>وضعیت</th>
-                            <th>جزئیات</th> <!-- ستون جدید برای دکمه جزئیات -->
+                            <th>Order Number</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,7 +23,7 @@
                                 <td>${{ order.total_price|floatformat:2 }}</td>
                                 <td>{{ order.get_status_display }}</td>
                                 <td>
-                                    <a href="{% url 'root:order_detail' order.id %}" class="btn_1">مشاهده جزئیات</a>
+                                    <a href="{% url 'root:order_detail' order.id %}" class="btn_1">View Details</a>
                                 </td>
                             </tr>
                         {% endfor %}

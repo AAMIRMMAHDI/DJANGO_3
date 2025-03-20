@@ -2,9 +2,7 @@
 {% load static %}
 {% block title %}{{ product.name }}{% endblock title %}
 {% block 'content' %}
-    <!-- slider Area Start-->
     <div class="slider-area ">
-        <!-- Mobile Menu -->
         <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'assets/img/hero/category.jpg' %}">
             <div class="container">
                 <div class="row">
@@ -17,9 +15,7 @@
             </div>
         </div>
     </div>
-    <!-- slider Area End-->
 
-    <!--================Single Product Area =================-->
     <div class="product_image_area">
         <div class="container">
             <div class="row justify-content-center">
@@ -28,13 +24,12 @@
                         <div class="single_product_img">
                             <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
                         </div>
-                        <!-- اگر تصاویر بیشتری دارید، می‌توانید آنها را اینجا اضافه کنید -->
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="single_product_text text-center">
                         <h3>{{ product.name }}</h3>
-                        <p>{{ product.description }}</p>  <!-- اگر فیلد description در مدل محصول دارید -->
+                        <p>{{ product.description }}</p>
                         <div class="card_area">
                             <div class="product_count_area">
                                 <p>Quantity</p>
@@ -61,9 +56,7 @@
             </div>
         </div>
     </div>
-    <!--================End Single Product Area =================-->
 
-    <!-- اسکریپت برای مدیریت مقدار quantity -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const quantityInput = document.querySelector('.input-number');
@@ -71,7 +64,6 @@
             const decrementButton = document.querySelector('.inumber-decrement');
             const incrementButton = document.querySelector('.number-increment');
 
-            // کاهش مقدار quantity
             decrementButton.addEventListener('click', function() {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue > 1) {
@@ -80,7 +72,6 @@
                 }
             });
 
-            // افزایش مقدار quantity
             incrementButton.addEventListener('click', function() {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue < 10) {
@@ -89,7 +80,6 @@
                 }
             });
 
-            // تغییر مقدار quantity هنگام تایپ دستی
             quantityInput.addEventListener('input', function() {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue < 1) quantityInput.value = 1;

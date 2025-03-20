@@ -2,15 +2,13 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام دسته')
-    image = models.ImageField(upload_to='categories/', verbose_name='تصویر')  # اضافه کردن فیلد تصویر
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, verbose_name='دسته والد')
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = 'دسته'
-        verbose_name_plural = 'دسته‌ها'
+        verbose_name_plural = 'Categories'
 
 
 from django.db import models
@@ -20,6 +18,9 @@ class ab(models.Model):
 
     def __str__(self):
         return self.image.name  # بازگرداندن نام فایل تصویر به عنوان رشته
+
+    class Meta:
+        verbose_name_plural = 'Shop by Category'
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام محصول')
@@ -34,8 +35,7 @@ class Product(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'محصول'
-        verbose_name_plural = 'محصولات'
+        verbose_name_plural = 'Products'
 
 
 from django.db import models
@@ -68,7 +68,6 @@ class Cart(models.Model):
         return f"سبد خرید کاربر {self.user.username}"
 
     class Meta:
-        verbose_name = 'سبد خرید'
         verbose_name_plural = 'سبدهای خرید'
 
 from django.db import models
@@ -83,7 +82,6 @@ class CartItem(models.Model):
         return f"{self.quantity} عدد {self.product.name} در سبد خرید"
 
     class Meta:
-        verbose_name = 'آیتم سبد خرید'
         verbose_name_plural = 'آیتم‌های سبد خرید'
 
 
@@ -94,7 +92,7 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='profile_images/', default='default_profile.png')
+    image = models.ImageField(upload_to='profile_images/', default='profile_images/default_profile.png')
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -128,12 +126,16 @@ class Order(models.Model):
         ('canceled', 'لغو شده'),
     ], default='pending', verbose_name='وضعیت')
 
+    # فیلدهای جدید برای اطلاعات فرم پرداخت
+    full_name = models.CharField(max_length=255, verbose_name='نام کامل')
+    address = models.TextField(verbose_name='آدرس')
+    phone = models.CharField(max_length=15, verbose_name='تلفن')
+
     def __str__(self):
         return f"سفارش #{self.id} توسط {self.user.username}"
 
     class Meta:
-        verbose_name = 'سفارش'
-        verbose_name_plural = 'سفارشات'
+        verbose_name_plural = 'Orders'
 
 
 class OrderItem(models.Model):
@@ -146,5 +148,4 @@ class OrderItem(models.Model):
         return f"{self.quantity} عدد {self.product.name} در سفارش #{self.order.id}"
 
     class Meta:
-        verbose_name = 'آیتم سفارش'
         verbose_name_plural = 'آیتم‌های سفارش'

@@ -4,19 +4,19 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h2>جزئیات سفارش #{{ order.id }}</h2>
-                <p>وضعیت: {{ order.get_status_display }}</p>
-                <p>جمع کل: ${{ order.total_price|floatformat:2 }}</p>
-                <p>تاریخ سفارش: {{ order.created_at }}</p>
+                <h2>Order Details #{{ order.id }}</h2>
+                <p>Status: {{ order.get_status_display }}</p>
+                <p>Total: ${{ order.total_price|floatformat:2 }}</p>
+                <p>Order Date: {{ order.created_at }}</p>
 
-                <h3>آیتم‌های سفارش</h3>
+                <h3>Order Items</h3>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>محصول</th>
-                            <th>تعداد</th>
-                            <th>قیمت واحد</th>
-                            <th>جمع</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,7 +30,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="{% url 'root:order_history' %}" class="btn_1">بازگشت به تاریخچه سفارشات</a>
+                <a href="{% url 'root:order_history' %}" class="btn_1">Back to Order History</a>
             </div>
         </div>
     </div>
