@@ -39,6 +39,5 @@ urlpatterns = [
     path('verify-code/', verify_code, name='verify_code'),
     path('set-new-password/', set_new_password, name='set_new_password'),
 
-    # Contact
-    path('contact/', contact, name='contact'),
+
 ]

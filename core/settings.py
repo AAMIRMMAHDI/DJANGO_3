@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'root',
-]
+    'Contact',
+    'Shop_by_Category',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

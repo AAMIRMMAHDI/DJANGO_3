@@ -7,9 +7,9 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.db.models import Q
 import random
-from .models import Category, Product, ContactMessage, Cart, CartItem, Order, OrderItem, Profile, ab
-from .forms import ContactForm, ProfileForm
-
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Profile, ab
+from .forms import  ProfileForm
+from Shop_by_Category.models import ab
 # Home and Basic Pages
 def home(request):
     categories = Category.objects.all()
@@ -29,23 +29,7 @@ def about(request):
 def x_page(request):
     return render(request, 'root/help.html')
 
-# Contact
-def contact(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your message has been sent successfully!')
-            return redirect('root:contact')
-        else:
-            messages.error(request, 'Error sending the message. Please check the fields.')
-    else:
-        form = ContactForm()
 
-    context = {
-        'form': form,
-    }
-    return render(request, "root/contact.html", context)
 
 # Product Related Views
 def product_list(request):

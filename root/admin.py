@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Order, OrderItem, ContactMessage, ab
+from .models import Category, Product, Order, OrderItem
 
 # Category Admin
 @admin.register(Category)
@@ -33,14 +33,3 @@ class OrderAdmin(admin.ModelAdmin):
         }),
     )
 
-# Contact Message Admin
-@admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'subject', 'created_at')
-    search_fields = ('name', 'email', 'subject')
-    list_filter = ('created_at',)
-
-# Shop by Category Admin (ab model)
-@admin.register(ab)
-class abAdmin(admin.ModelAdmin):
-    list_display = ('image',)

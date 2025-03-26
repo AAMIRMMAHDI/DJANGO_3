@@ -1,4 +1,5 @@
 from django.db import models
+from Shop_by_Category.models import ab
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام دسته')
@@ -10,17 +11,6 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-
-from django.db import models
-
-class ab(models.Model):
-    image = models.ImageField(upload_to='abs/', verbose_name='تصویر')  # اضافه کردن فیلد تصویر
-
-    def __str__(self):
-        return self.image.name  # بازگرداندن نام فایل تصویر به عنوان رشته
-
-    class Meta:
-        verbose_name_plural = 'Shop by Category'
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام محصول')
@@ -37,22 +27,6 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = 'Products'
 
-
-from django.db import models
-
-class ContactMessage(models.Model):
-    name = models.CharField(max_length=255)
-    email = models.EmailField()
-    subject = models.CharField(max_length=255)
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Message from {self.name} - {self.subject}"
-
-    class Meta:
-        verbose_name = "Contact Message"
-        verbose_name_plural = "Contact Messages"
 
 
 
