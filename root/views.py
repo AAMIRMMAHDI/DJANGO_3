@@ -27,7 +27,7 @@ def about(request):
     return render(request, "root/about.html")
 
 def x_page(request):
-    return render(request, 'root/help.html')
+    return render(request, 'form/login.html')
 
 
 
